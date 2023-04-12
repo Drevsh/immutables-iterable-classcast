@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Criteria
-@Criteria.Repository(facets = { ReactorWatchable.class, ReactorReadable.class, ReactorWritable.class })
+@Criteria.Repository
 @Value.Immutable
 public interface Person {
     @Criteria.Id

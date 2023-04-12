@@ -6,7 +6,6 @@ import de.stahlmann.immutables.model.Person;
 import de.stahlmann.immutables.model.PersonCriteria;
 import de.stahlmann.immutables.model.PersonRepository;
 import de.stahlmann.immutables.model.Pet;
-import org.immutables.criteria.backend.WriteResult;
 import org.immutables.criteria.inmemory.InMemoryBackend;
 
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.List;
 public class Test {
 
     public static void main(String[] args) {
-
         InMemoryBackend backend = new InMemoryBackend();
         PersonRepository repository = new PersonRepository(backend);
 
@@ -33,17 +31,14 @@ public class Test {
                 .age(23)
                 .pets(pets)
                 .build();
+        repository.insert(person);
 
-        WriteResult block = repository.insert(person)
-                .block();
+        // Exception is thrown here
+        // Exception in thread "main" java.lang.ClassCastException: class org.immutables.criteria.matcher.IterableMatcher$1Local cannot be cast to class de.stahlmann.immutables.model.PetCriteriaTemplate
+        PersonCriteria criteria = PersonCriteria.person.pets.any().name.contains("Panda");
 
-        PersonCriteria criteria = PersonCriteria.person
-                .pets.any().name.contains("Panda");
-
-        // Exception in thread "main" java.lang.IllegalArgumentException: object is not an instance of declaring class
         Person person1 = repository.find(criteria)
-                .one()
-                .block();
+                .one();
 
         System.out.println(person1);
     }
